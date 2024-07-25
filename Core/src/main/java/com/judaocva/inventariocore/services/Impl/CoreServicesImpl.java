@@ -3,10 +3,13 @@ package com.judaocva.inventariocore.services.Impl;
 import com.judaocva.inventariocore.dto.GenericResponseDto;
 import com.judaocva.inventariocore.dto.LoginRequestDto;
 import com.judaocva.inventariocore.dto.LoginResponseDto;
-import com.judaocva.inventariocore.dto.UserRequestDto;
+import com.judaocva.inventariocore.dto.UserDto;
 import com.judaocva.inventariocore.miscellaneous.GenericMethods;
 import com.judaocva.inventariocore.repository.UsersRepository;
+import com.judaocva.inventariocore.repository.TokenRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import com.judaocva.inventariocore.services.CoreServices;
 
@@ -14,27 +17,52 @@ import com.judaocva.inventariocore.services.CoreServices;
 public class CoreServicesImpl implements CoreServices {
 
     private final UsersRepository usersRepository;
+    private final TokenRepository tokenRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public CoreServicesImpl(UsersRepository usersRepository) {
+    @Autowired
+    public CoreServicesImpl(UsersRepository usersRepository, TokenRepository tokenRepository, PasswordEncoder passwordEncoder) {
         this.usersRepository = usersRepository;
+        this.tokenRepository = tokenRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public GenericResponseDto login(LoginRequestDto loginRequestDto) {
         GenericResponseDto genericResponseDto = new GenericResponseDto();
         try {
-            LoginResponseDto loginResponseDto = new LoginResponseDto();
-            loginResponseDto.setToken(GenericMethods.generateToken());
+            String storedPassword = usersRepository.getPasswordByEmail(loginRequestDto.getEmail());
+            if (passwordEncoder.matches(loginRequestDto.getPassword(), storedPassword)) {
+                UserDto userDto = usersRepository.getUserByEmail(loginRequestDto.getEmail());
+                String token = GenericMethods.generateToken();
+                tokenRepository.saveOrUpdateToken(userDto.getId(), token);
+                LoginResponseDto loginResponseDto = new LoginResponseDto();
+                loginResponseDto.setName(userDto.getName());
+                loginResponseDto.setEmail(userDto.getEmail());
+                loginResponseDto.setPhone(userDto.getPhone());
+                loginResponseDto.setToken(token);
+                genericResponseDto.setStatus(HttpStatus.OK.value());
+                genericResponseDto.setMessage("Login successful");
+                genericResponseDto.setData(loginResponseDto);
+            } else {
+                genericResponseDto.setStatus(HttpStatus.UNAUTHORIZED.value());
+                genericResponseDto.setMessage("Invalid credentials");
+            }
         } catch (Exception e) {
+            e.printStackTrace();
             genericResponseDto.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
             genericResponseDto.setMessage("Error in login service, contact the administrator.");
         }
         return genericResponseDto;
     }
 
-    public GenericResponseDto saveUser(UserRequestDto userRequestDto) {
+    @Override
+    public GenericResponseDto saveUser(UserDto userRequestDto) {
         GenericResponseDto genericResponseDto = new GenericResponseDto();
         try {
+            if (userRequestDto.getPassword() != null && !userRequestDto.getPassword().isEmpty() && !userRequestDto.getPassword().isBlank())
+                userRequestDto.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
+
             if (userRequestDto.getId() == 0) {
                 usersRepository.createUser(userRequestDto);
             } else {
@@ -49,5 +77,4 @@ public class CoreServicesImpl implements CoreServices {
         }
         return genericResponseDto;
     }
-
 }

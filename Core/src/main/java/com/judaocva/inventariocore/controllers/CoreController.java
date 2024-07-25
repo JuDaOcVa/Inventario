@@ -2,7 +2,7 @@ package com.judaocva.inventariocore.controllers;
 
 import com.judaocva.inventariocore.dto.GenericResponseDto;
 import com.judaocva.inventariocore.dto.LoginRequestDto;
-import com.judaocva.inventariocore.dto.UserRequestDto;
+import com.judaocva.inventariocore.dto.UserDto;
 import com.judaocva.inventariocore.services.CoreServices;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +18,7 @@ public class CoreController {
 
     @PostMapping("/users/save")
     @ResponseBody
-    public GenericResponseDto saveUser(@RequestBody UserRequestDto userRequestDto) {
+    public GenericResponseDto saveUser(@RequestBody UserDto userRequestDto) {
         return coreServices.saveUser(userRequestDto);
     }
 
