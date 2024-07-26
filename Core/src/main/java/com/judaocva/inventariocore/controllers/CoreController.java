@@ -2,6 +2,7 @@ package com.judaocva.inventariocore.controllers;
 
 import com.judaocva.inventariocore.dto.GenericResponseDto;
 import com.judaocva.inventariocore.dto.LoginRequestDto;
+import com.judaocva.inventariocore.dto.ProductSaveRequestDto;
 import com.judaocva.inventariocore.dto.UserDto;
 import com.judaocva.inventariocore.services.CoreServices;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,12 @@ public class CoreController {
     @ResponseBody
     public GenericResponseDto login(@RequestBody LoginRequestDto loginRequestDto) {
         return coreServices.login(loginRequestDto);
+    }
+
+    @PostMapping("/products/save")
+    @ResponseBody
+    public GenericResponseDto saveProduct(@RequestBody ProductSaveRequestDto productSaveRequestDto) {
+        return coreServices.saveProduct(productSaveRequestDto);
     }
 
 }

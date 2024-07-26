@@ -1,10 +1,8 @@
 package com.judaocva.inventariocore.services.Impl;
 
-import com.judaocva.inventariocore.dto.GenericResponseDto;
-import com.judaocva.inventariocore.dto.LoginRequestDto;
-import com.judaocva.inventariocore.dto.LoginResponseDto;
-import com.judaocva.inventariocore.dto.UserDto;
+import com.judaocva.inventariocore.dto.*;
 import com.judaocva.inventariocore.miscellaneous.GenericMethods;
+import com.judaocva.inventariocore.repository.ProductsRepository;
 import com.judaocva.inventariocore.repository.UsersRepository;
 import com.judaocva.inventariocore.repository.TokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +16,14 @@ public class CoreServicesImpl implements CoreServices {
 
     private final UsersRepository usersRepository;
     private final TokenRepository tokenRepository;
+    private final ProductsRepository productsRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public CoreServicesImpl(UsersRepository usersRepository, TokenRepository tokenRepository, PasswordEncoder passwordEncoder) {
+    public CoreServicesImpl(UsersRepository usersRepository, TokenRepository tokenRepository, ProductsRepository productsRepository, PasswordEncoder passwordEncoder) {
         this.usersRepository = usersRepository;
         this.tokenRepository = tokenRepository;
+        this.productsRepository = productsRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -51,7 +51,7 @@ public class CoreServicesImpl implements CoreServices {
         } catch (Exception e) {
             e.printStackTrace();
             genericResponseDto.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-            genericResponseDto.setMessage("Error in login service, contact the administrator.");
+            genericResponseDto.setMessage("Error in login service, contact the administrator. " + e.getMessage());
         }
         return genericResponseDto;
     }
@@ -73,7 +73,28 @@ public class CoreServicesImpl implements CoreServices {
         } catch (Exception e) {
             e.printStackTrace();
             genericResponseDto.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-            genericResponseDto.setMessage("Error saving user, contact the administrator.");
+            genericResponseDto.setMessage("Error saving user, contact the administrator. " + e.getMessage());
+        }
+        return genericResponseDto;
+    }
+
+    @Override
+    public GenericResponseDto saveProduct(ProductSaveRequestDto productSaveRequestDto) {
+        GenericResponseDto genericResponseDto = new GenericResponseDto();
+        try {
+            if (productSaveRequestDto.getId() == 0) {
+                productSaveRequestDto.setIdUser(tokenRepository.getIdUserByToken(productSaveRequestDto.getToken()));
+                productsRepository.createProduct(productSaveRequestDto);
+            } else {
+                productSaveRequestDto.setQuantity(productSaveRequestDto.getQuantity() + productsRepository.getQuantityById(productSaveRequestDto.getId()));
+                productsRepository.updateProduct(productSaveRequestDto);
+            }
+            genericResponseDto.setStatus(HttpStatus.OK.value());
+            genericResponseDto.setMessage("Product saved successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            genericResponseDto.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            genericResponseDto.setMessage("Error saving product, contact the administrator. " + e.getMessage());
         }
         return genericResponseDto;
     }

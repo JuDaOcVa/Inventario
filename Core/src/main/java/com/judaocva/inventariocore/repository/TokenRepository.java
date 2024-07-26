@@ -1,11 +1,13 @@
 package com.judaocva.inventariocore.repository;
 
+import com.judaocva.inventariocore.miscellaneous.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Repository
@@ -31,6 +33,23 @@ public class TokenRepository {
                     insertStatement.setInt(1, idUser);
                     insertStatement.setString(2, token);
                     insertStatement.executeUpdate();
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public int getIdUserByToken(String token) {
+        String sql = "SELECT id_user FROM tokens WHERE token = ? ";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, token);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("id_user");
+                } else {
+                    throw new RuntimeException("User not found");
                 }
             }
         } catch (SQLException e) {
