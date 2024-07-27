@@ -1,0 +1,25 @@
+<div class="container">
+    <form class="form" (ngSubmit)="onSubmit()">
+        <p class="form-title">Register and manage your inventory</p>
+        <div class="input-container">
+          <input type="text" placeholder="Enter name" [(ngModel)]="name" name="name">
+      </div>
+      <div class="input-container">
+        <input type="text" placeholder="Enter phone number" [(ngModel)]="phone" name="phone">
+    </div>
+         <div class="input-container">
+           <input type="email" placeholder="Enter email" [(ngModel)]="email" name="email">
+           </div>
+       <div class="input-container">
+           <input type="password" placeholder="Enter password" [(ngModel)]="password" name="password">
+         </div>
+          <button type="submit" class="submit">
+         Sign up
+       </button>
+    
+       <p class="signup-link">
+         Already have an account?
+         <a routerLink="/login">Sign in</a>
+       </p>
+    </form>
+    </div>

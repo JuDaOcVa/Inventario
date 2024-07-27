@@ -1,0 +1,34 @@
+<div class="container">
+    <h1 class="title">Products</h1>
+    
+    <div class="table">
+        <div class="table-row header" *ngIf="hasProducts">
+            <div class="table-cell">ID</div>
+            <div class="table-cell">Name</div>
+            <div class="table-cell">Quantity</div>
+            <div class="table-cell">Status</div>
+            <div class="table-cell">Actions</div> 
+        </div>
+        <div *ngIf="hasProducts && products.length > 0; else noProducts">
+            <div class="table-row" *ngFor="let product of products">
+                <div class="table-cell">{{ product.id }}</div>
+                <div class="table-cell">{{ product.name }}</div>
+                <div class="table-cell">{{ product.quantity }}</div>
+                <div class="table-cell">{{ getStatusSymbol(product.status) }}</div>
+                <div class="table-cell button-container">
+                    <button class="Btn" id="btnEdit">
+                    <svg class="svgIcon" viewBox="0 0 24 24" height="1.5em" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M20.8477 1.87868C19.6761 0.707109 17.7766 0.707105 16.605 1.87868L2.44744 16.0363C2.02864 16.4551 1.74317 16.9885 1.62702 17.5692L1.03995 20.5046C0.760062 21.904 1.9939 23.1379 3.39334 22.858L6.32868 22.2709C6.90945 22.1548 7.44285 21.8693 7.86165 21.4505L22.0192 7.29289C23.1908 6.12132 23.1908 4.22183 22.0192 3.05025L20.8477 1.87868ZM18.0192 3.29289C18.4098 2.90237 19.0429 2.90237 19.4335 3.29289L20.605 4.46447C20.9956 4.85499 20.9956 5.48815 20.605 5.87868L17.9334 8.55027L15.3477 5.96448L18.0192 3.29289ZM13.9334 7.3787L3.86165 17.4505C3.72205 17.5901 3.6269 17.7679 3.58818 17.9615L3.00111 20.8968L5.93645 20.3097C6.13004 20.271 6.30784 20.1759 6.44744 20.0363L16.5192 9.96448L13.9334 7.3787Z"/></svg>
+                    <span class="tooltip">Edit</span>
+                 </button>
+                 <button class="Btn" id="btnDelete">
+                    <svg  class="svgIcon" viewBox="0 0 24 24" height="1.5em" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.755,20.283,4,8H20L18.245,20.283A2,2,0,0,1,16.265,22H7.735A2,2,0,0,1,5.755,20.283ZM21,4H16V3a1,1,0,0,0-1-1H9A1,1,0,0,0,8,3V4H3A1,1,0,0,0,3,6H21a1,1,0,0,0,0-2Z"/></svg>
+                    <span class="tooltip">Delete</span>
+                 </button>
+                </div>
+            </div>
+        </div>
+        <ng-template #noProducts>
+            <h3 class="msg-products">No products found</h3>
+        </ng-template>
+    </div>
+</div>

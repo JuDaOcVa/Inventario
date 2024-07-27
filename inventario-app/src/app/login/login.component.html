@@ -1,0 +1,16 @@
+<div class="container">
+  <form class="form" (ngSubmit)="onSubmit()">
+    <p class="form-title">Sign in to your inventory</p>
+    <div class="input-container">
+      <input type="email" placeholder="Enter email" [(ngModel)]="email" name="email">
+      </div>
+    <div class="input-container">
+      <input type="password" placeholder="Enter password" [(ngModel)]="password" name="password">
+    </div>
+    <button type="submit" class="submit">Sign in</button>
+    <p class="signup-link">
+      No account?
+      <a routerLink="/register">Sign up</a>
+    </p>
+  </form>
+</div>
