@@ -31,7 +31,7 @@ public class ProductsRepository {
             preparedStatement.setInt(1, productSaveRequestDto.getIdUser());
             preparedStatement.setString(2, productSaveRequestDto.getProductName());
             preparedStatement.setInt(3, productSaveRequestDto.getQuantity());
-            preparedStatement.setInt(4, Constants.STATUS_ACTIVE);
+            preparedStatement.setInt(4, productSaveRequestDto.getStatus());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

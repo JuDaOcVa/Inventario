@@ -33,7 +33,9 @@ export class HomeComponent implements OnInit {
   }
 
   checkProducts() {
+    if (this.products && Array.isArray(this.products)) {
     this.hasProducts = this.products.length > 0;
+    }
   }
 
   getStatusSymbol(status: number): string {

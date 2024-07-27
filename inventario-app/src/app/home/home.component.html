@@ -10,7 +10,7 @@
             <div class="table-cell">Status</div>
             <div class="table-cell">Actions</div> 
         </div>
-        <div *ngIf="hasProducts && products.length > 0; else noProducts">
+        <div *ngIf="products && hasProducts; else noProducts">
             <div class="table-row" *ngFor="let product of products">
                 <div class="table-cell">{{ product.id }}</div>
                 <div class="table-cell">{{ product.productName }}</div>
