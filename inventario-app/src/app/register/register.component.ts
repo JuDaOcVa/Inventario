@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { API_URLS } from '../../config/api-urls';
 import { Router } from '@angular/router';
-import { RegisterResponse } from '../models/register-response.model';
+import { GenericResponse } from '../models/generic-response.model';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -25,7 +25,7 @@ onSubmit() {
     password: this.password
   };
 
-  this.http.post<RegisterResponse>(API_URLS.REGISTER, registerData).subscribe(response => {
+  this.http.post<GenericResponse>(API_URLS.REGISTER, registerData).subscribe(response => {
     if (response.status === 200) {
       Swal.fire({
         icon: 'success',
@@ -45,7 +45,7 @@ onSubmit() {
     Swal.fire({
       icon: 'error',
       title: 'Register Failed',
-      text: 'Error en la solicitud: ' + error.message,
+      text: 'Error : ' + error.message,
     });
   });
 }

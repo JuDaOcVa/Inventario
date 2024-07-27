@@ -1,6 +1,7 @@
 package com.judaocva.inventariocore.services.Impl;
 
 import com.judaocva.inventariocore.dto.*;
+import com.judaocva.inventariocore.miscellaneous.Constants;
 import com.judaocva.inventariocore.miscellaneous.GenericMethods;
 import com.judaocva.inventariocore.repository.ProductsRepository;
 import com.judaocva.inventariocore.repository.UsersRepository;
@@ -88,11 +89,12 @@ public class CoreServicesImpl implements CoreServices {
                 productSaveRequestDto.setIdUser(tokenRepository.getIdUserByToken(productSaveRequestDto.getToken()));
                 productsRepository.createProduct(productSaveRequestDto);
             } else {
-                productSaveRequestDto.setQuantity(productSaveRequestDto.getQuantity() + productsRepository.getQuantityById(productSaveRequestDto.getId()));
+                productSaveRequestDto.setQuantity(productSaveRequestDto.getQuantity());
                 productsRepository.updateProduct(productSaveRequestDto);
             }
+            String action=(productSaveRequestDto.getStatus()== Constants.STATUS_DELETED)?"deleted":"saved";
             genericResponseDto.setStatus(HttpStatus.OK.value());
-            genericResponseDto.setMessage("Product saved successfully");
+            genericResponseDto.setMessage("Product "+action+" successfully");
         } catch (Exception e) {
             e.printStackTrace();
             genericResponseDto.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());

@@ -49,7 +49,7 @@ export class LoginComponent {
       Swal.fire({
         icon: 'error',
         title: 'Login Failed',
-        text: 'Error en la solicitud: ' + error.message,
+        text: 'Error : ' + error.message,
       });
     });
   }

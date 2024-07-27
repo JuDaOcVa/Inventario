@@ -1,4 +1,4 @@
-export interface RegisterResponse {
+export interface GenericResponse {
     message: string;
     status: number;
   }

@@ -68,25 +68,8 @@ public class ProductsRepository {
         }
     }
 
-    public int getQuantityById(int id) {
-        String sql = "SELECT quantity FROM products WHERE id = ? ";
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, id);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    return resultSet.getInt("quantity");
-                } else {
-                    throw new RuntimeException("Product not found");
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public List<ProductDto> getProductsByIdUser(int idUser) {
-        String sql = "SELECT id, product_name, quantity, status FROM products WHERE id_user = ? AND status <> ?";
+        String sql = "SELECT id, product_name, quantity, status FROM products WHERE id_user = ? AND status <> ? ORDER BY id ASC";
         List<ProductDto> products = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
