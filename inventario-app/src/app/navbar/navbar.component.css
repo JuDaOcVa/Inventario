@@ -1,0 +1,50 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #cfd0d1;
+  border-bottom: 1px solid #000000;
+}
+
+.navbar-left {
+  width: 200px; 
+  height: 50px;
+  font-size: 30px;
+  font-weight: bold;
+  color: #007bff;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.user-info {
+  margin-right: 20px;
+  text-align: right;
+}
+
+.user-name {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.date-time {
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.logout-button {
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+}
+
+.logout-button:hover {
+  background-color: rgb(51, 37, 252);
+}

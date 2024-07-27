@@ -35,4 +35,10 @@ public class CoreController {
         return coreServices.saveProduct(productSaveRequestDto);
     }
 
+    @GetMapping("/products/getProducts")
+    @ResponseBody
+    public GenericResponseDto getProductsByToken(@RequestHeader String token) {
+        return coreServices.getProductsByToken(token);
+    }
+
 }

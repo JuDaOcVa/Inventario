@@ -1,3 +1,4 @@
+<app-navbar></app-navbar>
 <div class="container">
     <h1 class="title">Products</h1>
     
@@ -12,7 +13,7 @@
         <div *ngIf="hasProducts && products.length > 0; else noProducts">
             <div class="table-row" *ngFor="let product of products">
                 <div class="table-cell">{{ product.id }}</div>
-                <div class="table-cell">{{ product.name }}</div>
+                <div class="table-cell">{{ product.productName }}</div>
                 <div class="table-cell">{{ product.quantity }}</div>
                 <div class="table-cell">{{ getStatusSymbol(product.status) }}</div>
                 <div class="table-cell button-container">

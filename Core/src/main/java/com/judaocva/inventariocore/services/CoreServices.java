@@ -13,4 +13,6 @@ public interface CoreServices {
     GenericResponseDto saveUser(UserDto userRequestDto);
 
     GenericResponseDto saveProduct(ProductSaveRequestDto productSaveRequestDto);
+
+    GenericResponseDto getProductsByToken(String token);
 }

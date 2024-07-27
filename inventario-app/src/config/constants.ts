@@ -1,0 +1,5 @@
+export const CONSTANTS = {
+    STATUS_ACTIVE: 1,
+    STATUS_INACTIVE: 2,
+    STATUS_DELETED: 3,
+  };

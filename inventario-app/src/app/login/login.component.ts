@@ -25,6 +25,7 @@ export class LoginComponent {
     this.http.post<LoginResponse>(API_URLS.LOGIN, loginData).subscribe(response => {
       if (response.status === 200) {
         let userData = response.data;
+        localStorage.setItem('session','true')
         localStorage.setItem('userToken', userData.token);
         localStorage.setItem('userName', userData.name);
         localStorage.setItem('userEmail', userData.email);
@@ -35,7 +36,6 @@ export class LoginComponent {
           title: response.message,
           text: 'Welcome ' + userData.name + '!',
         }).then(() => {
-          console.log(localStorage);
           this.router.navigate(['/home']);
           });
       } else if (response.status === 401) {

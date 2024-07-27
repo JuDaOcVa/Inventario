@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Product } from '../models/product.model';
+import { GetProductResponse } from '../models/getproduct-response.model';
+import { API_URLS } from 'src/config/api-urls';
+import { CONSTANTS } from 'src/config/constants';
 
 @Component({
   selector: 'app-home',
@@ -7,17 +11,23 @@ import { Product } from '../models/product.model';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  products: Product[] = [
-    { id: 1, name: 'Product 1', quantity:2,status: 1 },
-    { id: 2, name: 'Product 2', quantity:1,status: 2 },
-    { id: 3, name: 'Product 3', quantity:3,status: 1 },
-    { id: 4, name: 'Product 4', quantity:4,status: 2 },
-    { id: 5, name: 'Product 5', quantity:5,status: 1 },
-  ];
+  products: Product[] = [];
   hasProducts: boolean = false;
+  constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    this.checkProducts();
+    this.fetchProducts();
+  }
+
+  fetchProducts() {
+    const token = localStorage.getItem('userToken'); 
+    const headers = new HttpHeaders().set('token', token || '');
+
+    this.http.get<GetProductResponse>(API_URLS.GETPRODUCTS, { headers })
+      .subscribe((response) => {
+        this.products = response.data;
+        this.checkProducts();
+      });
   }
 
   checkProducts() {
@@ -25,9 +35,9 @@ export class HomeComponent implements OnInit {
   }
 
   getStatusSymbol(status: number): string {
-    if (status === 1) {
+    if (status === CONSTANTS.STATUS_ACTIVE) {
       return '✅ Available';
-    } else if (status === 2) {
+    } else if (status === CONSTANTS.STATUS_INACTIVE) {
       return '⚠️ Inactive';
     }
     return '';

@@ -11,6 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import com.judaocva.inventariocore.services.CoreServices;
 
+import java.util.List;
+
 @Repository
 public class CoreServicesImpl implements CoreServices {
 
@@ -95,6 +97,28 @@ public class CoreServicesImpl implements CoreServices {
             e.printStackTrace();
             genericResponseDto.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
             genericResponseDto.setMessage("Error saving product, contact the administrator. " + e.getMessage());
+        }
+        return genericResponseDto;
+    }
+
+    @Override
+    public GenericResponseDto getProductsByToken(String token) {
+        GenericResponseDto genericResponseDto = new GenericResponseDto();
+        try {
+            int idUser = tokenRepository.getIdUserByToken(token);
+            List<ProductDto> products = productsRepository.getProductsByIdUser(idUser);
+            if (products.isEmpty()) {
+                genericResponseDto.setStatus(HttpStatus.NOT_FOUND.value());
+                genericResponseDto.setMessage("No products found for the given user.");
+            } else {
+                genericResponseDto.setStatus(HttpStatus.OK.value());
+                genericResponseDto.setMessage("Products obtained successfully");
+                genericResponseDto.setData(products);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            genericResponseDto.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            genericResponseDto.setMessage("Error obtaining products, contact the administrator. " + e.getMessage());
         }
         return genericResponseDto;
     }

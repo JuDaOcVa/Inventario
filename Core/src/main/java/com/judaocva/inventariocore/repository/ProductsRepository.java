@@ -1,5 +1,6 @@
 package com.judaocva.inventariocore.repository;
 
+import com.judaocva.inventariocore.dto.ProductDto;
 import com.judaocva.inventariocore.dto.ProductSaveRequestDto;
 import com.judaocva.inventariocore.miscellaneous.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,5 +83,29 @@ public class ProductsRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public List<ProductDto> getProductsByIdUser(int idUser) {
+        String sql = "SELECT id, product_name, quantity, status FROM products WHERE id_user = ? AND status <> ?";
+        List<ProductDto> products = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, idUser);
+            preparedStatement.setInt(2, Constants.STATUS_DELETED);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    ProductDto product = new ProductDto();
+                    product.setId(resultSet.getInt("id"));
+                    product.setIdUser(idUser);
+                    product.setProductName(resultSet.getString("product_name"));
+                    product.setQuantity(resultSet.getInt("quantity"));
+                    product.setStatus(resultSet.getInt("status"));
+                    products.add(product);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return products;
     }
 }

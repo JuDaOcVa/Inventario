@@ -1,3 +1,9 @@
+.title{
+  text-align: center;
+  margin-top: 20px;
+  color: #3c7ffc;
+}
+
 .container {
   width: 100%;
 }
