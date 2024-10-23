@@ -92,9 +92,9 @@ public class CoreServicesImpl implements CoreServices {
                 productSaveRequestDto.setQuantity(productSaveRequestDto.getQuantity());
                 productsRepository.updateProduct(productSaveRequestDto);
             }
-            String action=(productSaveRequestDto.getStatus()== Constants.STATUS_DELETED)?"deleted":"saved";
+            String action = (productSaveRequestDto.getStatus() == Constants.STATUS_DELETED) ? "deleted" : "saved";
             genericResponseDto.setStatus(HttpStatus.OK.value());
-            genericResponseDto.setMessage("Product "+action+" successfully");
+            genericResponseDto.setMessage("Product " + action + " successfully");
         } catch (Exception e) {
             e.printStackTrace();
             genericResponseDto.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());

@@ -1,6 +1,5 @@
 package com.judaocva.inventariocore.repository;
 
-import com.judaocva.inventariocore.miscellaneous.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
